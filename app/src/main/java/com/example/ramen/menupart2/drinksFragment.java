@@ -1,17 +1,9 @@
 package com.example.ramen.menupart2;
 
-//import android.support.v4.app;
-
-
-import android.app.Activity;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentController;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,10 +11,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.ramen.menupart2.Model.MenuItems;
 
@@ -44,7 +36,7 @@ public class drinksFragment extends Fragment {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-    private Fragment globalFrag= this;
+    private Fragment globalFrag = this;
 
 //    private Activity mainActivity;
 //    FragmentManager fragmentManager = getFragmentManager();
@@ -58,7 +50,7 @@ public class drinksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDataset();
+//        initDataset();
     }
 
 
@@ -109,13 +101,13 @@ public class drinksFragment extends Fragment {
     }
 
 
-
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static List<MenuItems> drinksList = new ArrayList<MenuItems>();
 
         public PlaceholderFragment() {
         }
@@ -125,6 +117,7 @@ public class drinksFragment extends Fragment {
          * number.
          */
         public static drinksFragment.PlaceholderFragment newInstance(String title) {
+            drinksList = initDataset(title);
             drinksFragment.PlaceholderFragment fragment = new drinksFragment.PlaceholderFragment();
             Bundle args = new Bundle();
             args.putString(ARG_SECTION_NUMBER, title);
@@ -132,14 +125,51 @@ public class drinksFragment extends Fragment {
             return fragment;
         }
 
+        private static List<MenuItems> initDataset(String label) {
+            List<MenuItems> listMenu = new ArrayList<>();
+
+
+            if (label.equals("Cold")) {
+                listMenu.add(new MenuItems("Fanta", 250, R.drawable.carlsberg, 4));
+                listMenu.add(new MenuItems("Coke", 350, R.drawable.carlsberg, 3));
+            } else if (label.equals("Hard")) {
+                listMenu.add(new MenuItems("Tuborg Beer", 250, R.drawable.carlsberg, 4));
+                listMenu.add(new MenuItems("Carlsberg Beer", 350, R.drawable.carlsberg, 3));
+            } else if (label.equals("Hot")) {
+                listMenu.add(new MenuItems("Tea", 250, R.drawable.carlsberg, 4));
+                listMenu.add(new MenuItems("Coffee", 350, R.drawable.carlsberg, 3));
+            } else {
+                listMenu.add(new MenuItems("Default Case", 250, R.drawable.carlsberg, 4));
+            }
+
+            return listMenu;
+
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.drinks_layout, container, false);
+            List<MenuItems> menuList = new ArrayList<>();
+
+//            menuList = initDataset();
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_drinks);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+
+//            RecyclerView.LayoutManager
+            MenuAdapter mAdapter = new MenuAdapter(drinksList);
+
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+
 //            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
+
+
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -149,11 +179,11 @@ public class drinksFragment extends Fragment {
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int position) {
+        public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
 
-            return drinksFragment.PlaceholderFragment.newInstance((String) getPageTitle(position));
+            return drinksFragment.PlaceholderFragment.newInstance(getPageTitle(position));
         }
 
         @Override
@@ -163,46 +193,48 @@ public class drinksFragment extends Fragment {
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public String getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Cold";
-                case 1:
-                    return "Hot";
-                case 2:
                     return "Hard";
+                case 1:
+                    return "Cold";
+                case 2:
+                    return "Hot";
             }
+
             return null;
         }
     }
 
-    private void initDataset() {
 
-
-//        menuList.add(new MenuItems("Guacamole and Chips", 200, R.drawable.guacamolenchips,3));
-//        menuList.add(new MenuItems("Barbecue Chicken Nachos", 200, R.drawable.bbq_chicken_nachos,3));
-//        menuList.add(new MenuItems("Pigs in a Blanket", 200, R.drawable.pigs_in_blanket,3));
+//    private void initDataset() {
 //
-//        menuList.add(new MenuItems("Bacon-Wrapped Potatoes With Creamy Dill Sauce ", 200, R.drawable.bacon_potato,3));
-//        menuList.add(new MenuItems("Barbecue Meatball Sliders ", 200, R.drawable.meatball_slider,3));
-//        menuList.add(new MenuItems("Sausage Sliders With Spinach and Peppers ", 200, R.drawable.sausage_sliders,3));
-//        menuList.add(new MenuItems("Spiced Tortilla Crisps With Hummus ", 200, R.drawable.tortilla_hummus,3));
-//        menuList.add(new MenuItems("Papad", 200, R.drawable.papad,3));
-
-//        menuList.add(new MenuItems("Chicken Roast", 200, R.drawable.chicken_roast,3));
-//        menuList.add(new MenuItems("Fried Rice", 140, R.drawable.friedrice,5));
-//        menuList.add(new MenuItems("Buff Momo", 200, R.drawable.momo,5));
-//        menuList.add(new MenuItems("Buff Sizzler", 200, R.drawable.sizzler_sizzler,3));
-//        menuList.add(new MenuItems("Chicken Chow mein", 350, R.drawable.recipechicken_chow_mein,3));
-//        menuList.add(new MenuItems("Chicken Momo", 180, R.drawable.chicken_momo,3));
 //
-//        menuList.add(new MenuItems("Fried Momo", 350, R.drawable.friedmomo,3));
-//        menuList.add(new MenuItems("Coke", 70, R.drawable.coke,3));
-
-
-//        menuList.add(new MenuItems("Tuborg Beer", 350, R.drawable.tuborg,3));
-        menuList.add(new MenuItems("Carlsberg Beer", 350, R.drawable.carlsberg, 3));
-
-
-    }
+////        menuList.add(new MenuItems("Guacamole and Chips", 200, R.drawable.guacamolenchips,3));
+////        menuList.add(new MenuItems("Barbecue Chicken Nachos", 200, R.drawable.bbq_chicken_nachos,3));
+////        menuList.add(new MenuItems("Pigs in a Blanket", 200, R.drawable.pigs_in_blanket,3));
+////
+////        menuList.add(new MenuItems("Bacon-Wrapped Potatoes With Creamy Dill Sauce ", 200, R.drawable.bacon_potato,3));
+////        menuList.add(new MenuItems("Barbecue Meatball Sliders ", 200, R.drawable.meatball_slider,3));
+////        menuList.add(new MenuItems("Sausage Sliders With Spinach and Peppers ", 200, R.drawable.sausage_sliders,3));
+////        menuList.add(new MenuItems("Spiced Tortilla Crisps With Hummus ", 200, R.drawable.tortilla_hummus,3));
+////        menuList.add(new MenuItems("Papad", 200, R.drawable.papad,3));
+//
+////        menuList.add(new MenuItems("Chicken Roast", 200, R.drawable.chicken_roast,3));
+////        menuList.add(new MenuItems("Fried Rice", 140, R.drawable.friedrice,5));
+////        menuList.add(new MenuItems("Buff Momo", 200, R.drawable.momo,5));
+////        menuList.add(new MenuItems("Buff Sizzler", 200, R.drawable.sizzler_sizzler,3));
+////        menuList.add(new MenuItems("Chicken Chow mein", 350, R.drawable.recipechicken_chow_mein,3));
+////        menuList.add(new MenuItems("Chicken Momo", 180, R.drawable.chicken_momo,3));
+////
+////        menuList.add(new MenuItems("Fried Momo", 350, R.drawable.friedmomo,3));
+////        menuList.add(new MenuItems("Coke", 70, R.drawable.coke,3));
+//
+//
+////        menuList.add(new MenuItems("Tuborg Beer", 350, R.drawable.tuborg,3));
+//        menuList.add(new MenuItems("Carlsberg Beer", 350, R.drawable.carlsberg, 3));
+//
+//
+//    }
 }
