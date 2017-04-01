@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_snacks"
+            android:icon="@drawable/popcorn"
+            android:title="Snacks/Apetizers" />
+        <item
+            android:id="@+id/nav_drinks"
+            android:icon="@drawable/glass1"
+            android:title="Drinks" />
+        <item
+            android:id="@+id/nav_dishes"
+            android:icon="@drawable/food3"
+            android:title="Main Dishes" />
+        <item
+            android:id="@+id/nav_breakfast"
+            android:icon="@drawable/breakfast"
+            android:title="Breakfast" />
+        <item
+            android:id="@+id/nav_lunch"
+            android:icon="@drawable/sandwich"
+            android:title="Lunch" />
+        <item
+            android:id="@+id/nav_dessert"
+            android:icon="@drawable/icecream1"
+            android:title="Desserts" />
+
+    </group>
+
+    <item android:title="Orders">
+        <menu>
+            <item
+                android:id="@+id/nav_orders"
+                android:icon="@drawable/list"
+                android:title="My Orders" />
+
+        </menu>
+    </item>
+
+    <item android:title="Contact Us">
+        <menu>
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Developer" />
+
+        </menu>
+    </item>
+
+
+
+</menu>
